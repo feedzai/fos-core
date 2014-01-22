@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+  <!-- Enable exporting logger configurations via JMX. This allows changing the log levels of individual loggers
+       by connecting to the process through a JMX client. -->
+  <jmxConfigurator/>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <withJansi>true</withJansi>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>INFO</level>
+    </filter>
+
+    <encoder>
+      <pattern>  %d{dd-MMM HH:mm:ss}  %highlight(%-5level)  %cyan(%-45logger{45})  %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>TRACE</level>
+    </filter>
+
+    <encoder>
+      <pattern>%d{dd-MMM HH:mm:ss} %-5level %logger{45}:%line %msg%n</pattern>
+    </encoder>
+
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- weekly rollover with compression for the old ones -->
+      <fileNamePattern>log/fos-server.%d{yyyy-MM}-week-%d{WW}.log.gz</fileNamePattern>
+
+      <!-- keep 8 weeks' worth of history -->
+      <maxHistory>8</maxHistory>
+    </rollingPolicy>
+  </appender>
+
+  <root level="INFO">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="FILE"/>
+  </root>
+</configuration>

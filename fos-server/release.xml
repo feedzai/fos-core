@@ -1,0 +1,46 @@
+<!--
+  $Author: luis.pureza $
+  $Date: 2010-04-06 10:43:32 +0100 (Tue, 06 Apr 2010) $
+  $Rev: 283 $
+-->
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+  <id>bin</id>
+  <includeBaseDirectory>true</includeBaseDirectory>
+  <formats>
+    <format>tar.gz</format>
+  </formats>
+  <fileSets>
+    <fileSet>
+      <directory>${project.basedir}</directory>
+      <includes>
+        <include>bin/**</include>
+        <include>conf/**</include>
+        <include>lib/**</include>
+        <include>README.txt</include>
+		<include>LICENSE.txt</include>
+      </includes>
+      <excludes>
+        <exclude>log/**</exclude>
+        <exclude>models/**</exclude>
+      </excludes>
+      <fileMode>0755</fileMode>
+      <outputDirectory>/</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>./</directory>
+      <outputDirectory>/log</outputDirectory>
+      <excludes>
+        <exclude>*/**</exclude>
+      </excludes>
+    </fileSet>
+    <fileSet>
+      <directory>./</directory>
+      <outputDirectory>/models</outputDirectory>
+      <excludes>
+        <exclude>*/**</exclude>
+      </excludes>
+    </fileSet>
+  </fileSets>
+</assembly>

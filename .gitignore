@@ -1,6 +1,22 @@
-*.class
-
-# Package Files #
-*.jar
+*~
+properties
+.classpath
+.project
+.settings/
+.idea/
+atlassian-ide-plugin.xml
+*.mine
+target
+.idea/
+*.iml
+*.ipr
+*.iws
+nbactions.xml
+project
+!project/build
 *.war
-*.ear
+*.log
+.DS_Store
+*.class
+*.log.gz
+fos-server/lib
