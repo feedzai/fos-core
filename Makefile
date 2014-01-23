@@ -10,5 +10,6 @@ test:
 all:
 	mvn clean install -DskipTests=true
 
-package:
+package:  all
+	mvn dependency:copy -DoutputDirectory=fos-server/lib -f non-core-dependencies.xml
 	mvn assembly:assembly -DskipTests -f fos-server/pom.xml

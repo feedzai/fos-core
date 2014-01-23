@@ -15,8 +15,8 @@ mkdir $BUILD_DIR/models
 # copy files
 cp fos-server/target/fos-server-*.jar $BUILD_DIR/lib
 cp fos-server/src/main/resources/ClassificationServerParameters.properties $BUILD_DIR/conf/fos.properties
-cp fos-impl-weka/src/test/resources/models/threadunsafe/test.header $BUILD_DIR/models
-cp fos-impl-weka/src/test/resources/models/test.model $BUILD_DIR/models
+cp ../fos-weka/src/test/resources/models/threadunsafe/test.header $BUILD_DIR/models
+cp ../fos-weka/src/test/resources/models/test.model $BUILD_DIR/models
 
 # edit files
 sed -i 's|src/test/resources/||g' $BUILD_DIR/conf/fos.properties 
