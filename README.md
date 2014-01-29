@@ -20,7 +20,7 @@ for a significant amount of overhead. Along with the slow RMI based interface, f
 You need:
 
 1. [Java SDK]: Java 7
-1. [Maven]: Tested with maven 3.0.X
+1. [Maven]: Tested with Maven 3
 1. Access to maven central repo (or a local proxy)
 
 After both the [Java SDK] and [Maven] are installed run the following command
@@ -31,6 +31,16 @@ This should compile fos-core, ran all the tests and install all modules into you
 
 
 ## Running FOS
+
+In order to start a FOS sever you need to create a bundle that contains both the core componentes and one or more fos backend implementations. 
+
+To create a bundle type 
+`make package` on the project root. This will:
+
+1. Build fos core
+2. Copy all dependencies listed in `non-core-dependencies.xml` into fos-server lib directory (this includes the weka and R API implementations)
+3. Create a tar.gz bundle with all the necessary code plus shell scripts to bootstrap the process. The file will be available as `fos-server/target/fos-server-bin.tar.gz`. 
+4. You can now deploy this self contained server.
 
 
 ## FAQ
