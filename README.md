@@ -2,7 +2,7 @@
 
 FOS is machine learning model training and scoring server in Java.
 
-Latest version build status is [Build Status]
+Latest version build status is [![Build Status](https://feedzaios.ci.cloudbees.com/buildStatus/icon?job=fos-core)](https://feedzaios.ci.cloudbees.com/job/fos-core/)
 
 
 ## Why FOS
@@ -60,6 +60,6 @@ say [fos-weka].
 [R]: http://www.r-project.org/
 [Maven]: http://maven.apache.org/
 [Java SDK]: http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
-[![Build Status](https://feedzaios.ci.cloudbees.com/buildStatus/icon?job=fos-core)](https://feedzaios.ci.cloudbees.com/job/fos-core/)
+
 
 
