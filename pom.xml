@@ -491,23 +491,6 @@
         </plugins>
       </build>
     </profile>
-
-    <profile>
-      <id>development</id>
-      <distributionManagement>
-        <snapshotRepository>
-          <id>snapshots</id>
-          <name>FeedZai internal snapshot repository</name>
-          <url>http://intra.feedzai.com/nexus/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-          <id>releases</id>
-          <name>FeedZai internal snapshot repository</name>
-          <url>http://intra.feedzai.com/nexus/content/repositories/releases</url>
-        </repository>
-      </distributionManagement>
-    </profile>
-
   </profiles>
 
   <repositories>
@@ -527,17 +510,6 @@
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
-    </repository>
-    <repository>
-      <id>feedzai-3rd-party-repo</id>
-      <name>FeedZai 3rd Party Repository</name>
-      <url>http://maven.feedzai.com/content/repositories/thirdparty</url>
-    </repository>
-    <!-- FeedZai Private Repositories -->
-    <repository>
-      <id>internal-feedzai-thirdparty-mvn-repo</id>
-      <name>FeedZai 3rd Party Private Repository</name>
-      <url>http://intra.feedzai.com/nexus/content/repositories/thirdparty</url>
     </repository>
   </repositories>
 </project>
