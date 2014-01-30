@@ -2,7 +2,10 @@
 
 FOS is machine learning model training and scoring server in Java.
 
-Latest version [![Build Status](https://feedzaios.ci.cloudbees.com/buildStatus/icon?job=fos-core)](https://feedzaios.ci.cloudbees.com/job/fos-core/)
+[![Build Status](https://feedzaios.ci.cloudbees.com/buildStatus/icon?job=fos-core)](https://feedzaios.ci.cloudbees.com/job/fos-core/)
+<p align="right">
+[![Cloudbees](http://www.cloudbees.com/sites/default/files/Button-Built-on-CB-1.png)](http://www.cloudbees.com/dev)
+</p>
 
 
 ## Why FOS
