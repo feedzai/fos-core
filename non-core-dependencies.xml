@@ -8,6 +8,18 @@
     <name>FOS</name>
     <description>Feedzai Open Scoring Server Bundle</description>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.feedzai.fos</groupId>
+            <artifactId>fos-impl-weka</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.feedzai.fos</groupId>
+            <artifactId>fos-impl-r</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+    </dependencies>
     <url>https://github.com/feedzai/fos-core</url>
     <build>
         <plugins>
@@ -15,20 +27,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>2.8</version>
-                <configuration>
-                    <artifactItems>
-                        <artifactItem>
-                            <groupId>com.feedzai.fos</groupId>
-                            <artifactId>fos-impl-weka</artifactId>
-                            <version>1.0.3</version>
-                        </artifactItem>
-                        <artifactItem>
-                            <groupId>com.feedzai.fos</groupId>
-                            <artifactId>fos-impl-r</artifactId>
-                            <version>1.0.3</version>
-                        </artifactItem>
-                    </artifactItems>
-                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -39,6 +37,5 @@
             <name>Maven Repository Switchboard</name>
             <url>http://repo1.maven.org/maven2</url>
         </repository>
-        <!-- Insert your own custom repo here -->
     </repositories>
 </project>
