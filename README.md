@@ -92,9 +92,6 @@ fos.factoryName=com.feedzai.fos.impl.weka.WekaManagerFactory
 
 We've prepared a couple [FOS samples]. Check them out
 
-
-## Scoring my first model
-
 ## FAQ
 
 ### I need to support library X. How can I do it?
