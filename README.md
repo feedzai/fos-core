@@ -92,12 +92,109 @@ fos.factoryName=com.feedzai.fos.impl.weka.WekaManagerFactory
 
 We've prepared a couple [FOS samples]. Check them out
 
-## FAQ
+## Implementing a FOS Module
 
-### I need to support library X. How can I do it?
-fos-core does not provide any concrete implementation. You may want to peek at fos-impl-dummy module in fos-core.
-After you've familiarized with the API (Manager, ManagerFactory and Scorer) you can take a peek at a real implementation,
-say [fos-weka].
+
+### Creating your own manager
+
+fos-core does not provide any concrete implementation. However, a bundled fos server includes both a [fos-weka] (active by default) and a [fos-r] implementation. It is pretty easy to create a new implementation if you want to leverage existing code.
+
+
+Your first step will be to understand [ManagerFactory] interface. A [ManagerFactory] should perform all the necessary boostrapping for a given [Manager] implementation, which must provide implementations for:
+
+1. Model training
+2. Model management (add, removal, import and export)
+3. A [Scorer] implementation 
+
+Lets dissect a real example:
+
+```java
+public class WekaManagerFactory implements ManagerFactory {
+
+    @Override
+    public Manager createManager(FosConfig configuration) {
+        WekaManagerConfig wekaManagerConfig = new WekaManagerConfig(configuration);
+        return new WekaManager(wekaManagerConfig);
+    }
+}
+```
+
+The first step is parse [Manager] specific configuration parameters
+
+```java
+    WekaManagerConfig wekaManagerConfig = new WekaManagerConfig(configuration);
+```
+
+Now that we have specific config, we can create a new [WekaManager]:
+
+```java
+    return new WekaManager(wekaManagerConfig);
+```
+
+Most of the heavy lifting is done by [WekaManager] implementation. Since most of them are Weka specifc, it is not worthwhile to go into implementation details here. The following operations are performed:
+
+1. Search for previously saved models and load their configuration. 
+1. Create a `fos-weka` [Scorer] implementation.
+1. Start listening to requests via RMI and [Kryo].
+1. Start a thread pool to allow parallel scoring.
+
+
+### Implementing model training
+
+In order to implement [model training], you need to supply the [model configuration] and training instances. You can see a practical example in [fos training sample]. 
+A model configuration is composed by:
+
+1. A set of key-value properties relevant from each implementation. We recomend to define all configuration options in a dedicated class (see [weka model configuration] for example).
+
+2. An [attribute] list. The number of atributes in the training data must match the configuration attribute list. An attribute can be:
+    1. [Numerical attribute]: Numeric attributes can be real or integer types.
+    2. [Categorical attribute]: For attributes with a limited set of valid values.
+
+
+
+You'll have to convert these FOS abstractions to a format your implementation understands. 
+
+
+There are multiple training entry points:
+
+```java
+ UUID trainAndAdd(ModelConfig config,List<Object[]> instances) throws FOSException;
+```
+
+`traindAndAdd`  must train a new classifier with the given configuration and using the given `instances`. It should return the serialized classifier and automatically make it avaiable for scoring
+
+```java
+ UUID trainAndAddFile(ModelConfig config,String path) throws FOSException;
+```
+`trainAndAddFile`  Same as above, but instances are read from a CSV file. 
+
+
+```java
+byte[] train(ModelConfig config,List<Object[]> instances) throws FOSException;
+```
+`train` Trains a model and returns its serialized representation. The model is not made available for scoring.
+
+
+```java
+byte[] trainFile(ModelConfig config, String path) throws FOSException;
+```
+`trainFile` same as above, but instances are read from a CSV file.
+
+
+### Implementing model Scoring
+
+Along with training models, the manager is also responsible for providing a [Scorer] implementation. There is a weka [weka scoring] example for reference.
+
+
+
+
+
+### Managing models
+
+
+
+
+
 
 [Kryo]: https://github.com/EsotericSoftware/kryo
 [fos-r]: https://github.com/feedzai/fos-r
@@ -107,5 +204,16 @@ say [fos-weka].
 [Maven]: http://maven.apache.org/
 [Java SDK]: http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
 [FOS samples]: https://github.com/feedzai/FosSample
-
+[ManagerFactory]: https://github.com/feedzai/fos-core/blob/master/fos-api/src/main/java/com/feedzai/fos/api/ManagerFactory.java?source=cc
+[Manager]: https://github.com/feedzai/fos-core/blob/master/fos-api/src/main/java/com/feedzai/fos/api/Manager.java?source=cc
+[Scorer]: https://github.com/feedzai/fos-core/blob/master/fos-api/src/main/java/com/feedzai/fos/api/Scorer.java?source=cc
+[WekaManager]: https://github.com/feedzai/fos-weka/blob/master/src/main/java/com/feedzai/fos/impl/weka/WekaManager.java?source=cc
+[model training]: https://github.com/feedzai/fos-core/blob/master/fos-api/src/main/java/com/feedzai/fos/api/Manager.java?source=c#L120
+[fos training sample]: https://github.com/feedzai/fos-sample/blob/master/src/main/java/com/feedzai/fos/samples/weka/WekaTraining.java#L65
+[attribute]: https://github.com/feedzai/fos-core/blob/master/fos-api/src/main/java/com/feedzai/fos/api/Attribute.java?source=cc#L37
+[Numerical attribute]: https://github.com/feedzai/fos-core/blob/master/fos-api/src/main/java/com/feedzai/fos/api/NumericAttribute.java?source=c#L32
+[Categorical attribute]: https://github.com/feedzai/fos-core/blob/master/fos-api/src/main/java/com/feedzai/fos/api/CategoricalAttribute.java#L46
+[model configuration]: https://github.com/feedzai/fos-core/blob/master/fos-api/src/main/java/com/feedzai/fos/api/ModelConfig.java?source=cc#L45
+[weka model configuration]: https://github.com/feedzai/fos-weka/blob/master/src/main/java/com/feedzai/fos/impl/weka/config/WekaModelConfig.java?source=c#L45
+[weka scoring]: https://github.com/feedzai/fos-sample/blob/master/src/main/java/com/feedzai/fos/samples/weka/WekaScoring.java#L45
 
