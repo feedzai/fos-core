@@ -34,19 +34,66 @@ After both the [Java SDK] and [Maven] are installed run the following command
 
 This should compile fos-core, ran all the tests and install all modules into your local maven repo.
 
+# FOS Quickstart
 
 ## Running FOS
 
-In order to start a FOS sever you need to create a bundle that contains both the core componentes and one or more fos backend implementations. 
+In order to start a FOS sever you need to create a bundle that contains both the core components and one or more fos backend implementations.
+
+## Creating a FOS server bundle
 
 To create a bundle type 
-`make package` on the project root. This will:
+`make package` on the `fos-core` project root. This will:
 
 1. Build fos core
 2. Copy all dependencies listed in `non-core-dependencies.xml` into fos-server lib directory (this includes the weka and R API implementations)
 3. Create a tar.gz bundle with all the necessary code plus shell scripts to bootstrap the process. The file will be available as `fos-server/target/fos-server-bin.tar.gz`. 
-4. You can now deploy this self contained server.
 
+## Running FOS
+
+1. Untar the server bundle on your install location. Let's assume FOS will be installed in the home dir
+
+```
+$ cd ~
+$ tar xf <git clone dir>/fos-server/target/fos-server-bin.tar.gz
+```
+
+By now you should have a `fos-server` on your home.
+
+```
+$ cd fos-server
+$ ~/fos-server $ ls
+bin  conf  lib  LICENSE.txt  log  models  README.txt
+```
+
+Inside there are a couple directories:
+
+1. `bin` with startup scripts
+1. `conf` with FOS configuration scripts
+1. `models` where trained models are going to be found
+
+To start fos, run the bundled startup script `bin/startup.sh`
+
+```
+$ bin/startup.sh
+03-Feb 04:28:31  INFO   com.feedzai.fos.server.Runner                  Starting fos server using configuration from conf/fos.properties
+03-Feb 04:28:31  INFO   com.feedzai.fos.server.Runner                  FOS Server started in 272ms
+```
+
+We've just started a FOS server with [Weka] support built into the [fos-weka] fos module.
+Currently FOS can only support an active module per runtime instance. The active server is
+set in the `fos.factoryName` configuration option inside `conf/fos.properties` file:
+
+```
+# the fos implementation to launch
+fos.factoryName=com.feedzai.fos.impl.weka.WekaManagerFactory
+```
+## Training and scoring my first model
+
+We've prepared a couple [FOS samples]. Check them out
+
+
+## Scoring my first model
 
 ## FAQ
 
@@ -62,6 +109,6 @@ say [fos-weka].
 [R]: http://www.r-project.org/
 [Maven]: http://maven.apache.org/
 [Java SDK]: http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
-
+[FOS samples]: https://github.com/feedzai/FosSample
 
 
