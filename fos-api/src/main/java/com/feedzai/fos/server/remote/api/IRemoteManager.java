@@ -22,9 +22,7 @@
  */
 package com.feedzai.fos.server.remote.api;
 
-import com.feedzai.fos.api.FOSException;
-import com.feedzai.fos.api.Manager;
-import com.feedzai.fos.api.ModelConfig;
+import com.feedzai.fos.api.*;
 import com.feedzai.fos.common.validation.NotBlank;
 import com.feedzai.fos.common.validation.NotNull;
 
@@ -49,17 +47,17 @@ public interface IRemoteManager extends Remote {
      * @return the id of the new model
      * @throws RemoteException when creating the classifier was not possible
      */
-    UUID addModel(ModelConfig config,byte[] model) throws RemoteException, FOSException;
+    UUID addModel(ModelConfig config, Model model) throws RemoteException, FOSException;
 
     /**
      * Adds a new model with the given configuration and using a local classifier source.
      *
-     * @param config        the configuration of the model
-     * @param localFileName the local filename (absolute path) of the serialized classifier
+     * @param config     the configuration of the model
+     * @param descriptor the {@link com.feedzai.fos.api.ModelDescriptor} describing the classifier
      * @return the id of the new model
      * @throws RemoteException when creating the classifier was not possible
      */
-    UUID addModel(ModelConfig config, @NotBlank String localFileName) throws RemoteException, FOSException;
+    UUID addModel(ModelConfig config, @NotBlank ModelDescriptor descriptor) throws RemoteException, FOSException;
 
     /**
      * Removes the model identified by <code>modelId</code> from the list of active scorers (does not delete classifier file).
@@ -88,19 +86,19 @@ public interface IRemoteManager extends Remote {
      * @param model   the new serialized classifier
      * @throws RemoteException when reconfiguring the model was not possible
      */
-    void reconfigureModel(UUID modelId,ModelConfig config,byte[] model) throws RemoteException, FOSException;
+    void reconfigureModel(UUID modelId,ModelConfig config, Model model) throws RemoteException, FOSException;
 
     /**
      * Reconfigures the model identified by <code>modelId</code> with the given configuration.
      * <p/>
      * Reloads the model now using the classifier in the local file <code>localFileName</code> (does not delete previous classifier file).
      *
-     * @param modelId       the id of the model to update
-     * @param config        the new configuration of the model
-     * @param localFileName the local filename (absolute path) of the serialized classifier
+     * @param modelId    the id of the model to update
+     * @param config     the new configuration of the model
+     * @param descriptor the {@link com.feedzai.fos.api.ModelDescriptor} describing the classifier
      * @throws RemoteException when reconfiguring the model was not possible
      */
-    void reconfigureModel(UUID modelId,ModelConfig config, @NotBlank String localFileName) throws RemoteException, FOSException;
+    void reconfigureModel(UUID modelId,ModelConfig config, @NotBlank ModelDescriptor descriptor) throws RemoteException, FOSException;
 
     /**
      * Lists the models configured in the system.
@@ -153,7 +151,7 @@ public interface IRemoteManager extends Remote {
      * @throws RemoteException when training was not possible
      */
     @NotNull
-    byte[] train(ModelConfig config,List<Object[]> instances) throws RemoteException, FOSException;
+    Model train(ModelConfig config,List<Object[]> instances) throws RemoteException, FOSException;
 
 
     /**
@@ -165,7 +163,7 @@ public interface IRemoteManager extends Remote {
      * @throws FOSException when training was not possible
      */
     @NotNull
-    byte[] trainFile(ModelConfig config, String path) throws RemoteException, FOSException;
+    Model trainFile(ModelConfig config, String path) throws RemoteException, FOSException;
 
     /**
      * Frees any resources allocated to this manager.
@@ -180,4 +178,9 @@ public interface IRemoteManager extends Remote {
      * @param savepath export model path
      */
     void save(UUID uuid, String savepath) throws RemoteException, FOSException;
+
+    /**
+     * @see com.feedzai.fos.api.Manager#saveAsPMML(java.util.UUID, String, boolean)
+     */
+    public abstract void saveAsPMML(UUID uuid, String savePath, boolean compress) throws RemoteException, FOSException;
 }

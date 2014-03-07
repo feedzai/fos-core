@@ -22,9 +22,7 @@
  */
 package com.feedzai.fos.server.remote.impl;
 
-import com.feedzai.fos.api.FOSException;
-import com.feedzai.fos.api.Manager;
-import com.feedzai.fos.api.ModelConfig;
+import com.feedzai.fos.api.*;
 import com.feedzai.fos.common.validation.NotBlank;
 import com.feedzai.fos.common.validation.NotNull;
 import com.feedzai.fos.server.remote.api.IRemoteManager;
@@ -62,13 +60,13 @@ public class RemoteManager implements IRemoteManager {
 
 
     @Override
-    public UUID addModel(ModelConfig config, byte[] model) throws RemoteException, FOSException {
+    public UUID addModel(ModelConfig config, Model model) throws RemoteException, FOSException {
         return this.manager.addModel(config, model);
     }
 
     @Override
-    public UUID addModel(ModelConfig config, @NotBlank String localFileName) throws RemoteException, FOSException {
-        return this.manager.addModel(config, localFileName);
+    public UUID addModel(ModelConfig config, @NotBlank ModelDescriptor descriptor) throws RemoteException, FOSException {
+        return this.manager.addModel(config, descriptor);
     }
 
     @Override
@@ -82,13 +80,13 @@ public class RemoteManager implements IRemoteManager {
     }
 
     @Override
-    public void reconfigureModel(UUID modelId, ModelConfig config, byte[] model) throws RemoteException, FOSException {
+    public void reconfigureModel(UUID modelId, ModelConfig config, Model model) throws RemoteException, FOSException {
         this.manager.reconfigureModel(modelId, config, model);
     }
 
     @Override
-    public void reconfigureModel(UUID modelId, ModelConfig config, String localFileName) throws RemoteException, FOSException {
-        this.manager.reconfigureModel(modelId, config, localFileName);
+    public void reconfigureModel(UUID modelId, ModelConfig config, ModelDescriptor descriptor) throws RemoteException, FOSException {
+        this.manager.reconfigureModel(modelId, config, descriptor);
     }
 
     @Override
@@ -122,17 +120,22 @@ public class RemoteManager implements IRemoteManager {
     }
 
     @Override
-    public byte[] train(ModelConfig config, List<Object[]> instances) throws RemoteException, FOSException {
+    public Model train(ModelConfig config, List<Object[]> instances) throws RemoteException, FOSException {
         return manager.train(config, instances);
     }
 
     @Override
-    public byte[] trainFile(ModelConfig config, String path) throws RemoteException, FOSException {
+    public Model trainFile(ModelConfig config, String path) throws RemoteException, FOSException {
         return manager.trainFile(config, path);
     }
 
     @Override
     public void save(UUID uuid, String savepath) throws RemoteException, FOSException {
         this.manager.save(uuid, savepath);
+    }
+
+    @Override
+    public void saveAsPMML(UUID uuid, String savePath, boolean compress) throws FOSException {
+        this.manager.saveAsPMML(uuid, savePath, compress);
     }
 }

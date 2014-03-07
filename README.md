@@ -170,13 +170,13 @@ There are multiple training entry points:
 
 
 ```java
-byte[] train(ModelConfig config,List<Object[]> instances) throws FOSException;
+Model train(ModelConfig config,List<Object[]> instances) throws FOSException;
 ```
-`train` Trains a model and returns its serialized representation. The model is not made available for scoring.
+`train` Trains a model and returns a Model. The Model implementation can be either a ModelBinary, which contains its serialized representation, or a ModelPMML, which contains a String with its representation in PMML. The model is not made available for scoring.
 
 
 ```java
-byte[] trainFile(ModelConfig config, String path) throws FOSException;
+Model trainFile(ModelConfig config, String path) throws FOSException;
 ```
 `trainFile` same as above, but instances are read from a CSV file.
 

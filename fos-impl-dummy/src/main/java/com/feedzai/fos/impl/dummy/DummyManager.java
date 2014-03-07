@@ -23,9 +23,7 @@
 package com.feedzai.fos.impl.dummy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.feedzai.fos.api.FOSException;
-import com.feedzai.fos.api.Manager;
-import com.feedzai.fos.api.ModelConfig;
+import com.feedzai.fos.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,22 +60,22 @@ public class DummyManager implements Manager {
     }
 
     @Override
-    public byte[] train(ModelConfig config, List<Object[]> instances)  {
+    public Model train(ModelConfig config, List<Object[]> instances)  {
         try {
             logger.trace("config='{}', instances='{}'", mapper.writeValueAsString(config), mapper.writeValueAsString(instances));
         } catch (IOException e) {
             logger.error(e.getMessage(), e); 
         }
-        return new byte[0];
+        return new ModelBinary(new byte[0]);
     }
 
     @Override
-    public byte[] trainFile(ModelConfig config, String path) throws FOSException {
-        return new byte[0];
+    public Model trainFile(ModelConfig config, String path) throws FOSException {
+        return new ModelBinary(new byte[0]);
     }
 
     @Override
-    public UUID addModel(ModelConfig config, byte[] model) {
+    public UUID addModel(ModelConfig config, Model model) {
         try {
             logger.trace("config='{}', model='{}'", mapper.writeValueAsString(config), mapper.writeValueAsString(model));
         } catch (IOException e) {
@@ -87,9 +85,9 @@ public class DummyManager implements Manager {
     }
 
     @Override
-    public UUID addModel(ModelConfig config, String localFileName) {
+    public UUID addModel(ModelConfig config, ModelDescriptor descriptor) {
         try {
-            logger.trace("config='{}', model='{}'", mapper.writeValueAsString(config), mapper.writeValueAsString(localFileName));
+            logger.trace("config='{}', model='{}'", mapper.writeValueAsString(config), mapper.writeValueAsString(descriptor.getModelFilePath()));
         } catch (IOException e) {
             logger.error(e.getMessage(), e); 
         }
@@ -111,7 +109,7 @@ public class DummyManager implements Manager {
     }
 
     @Override
-    public void reconfigureModel(UUID modelId, ModelConfig config, byte[] model) {
+    public void reconfigureModel(UUID modelId, ModelConfig config, Model model) {
         try {
             logger.trace("config='{}', model='{}'", mapper.writeValueAsString(config), mapper.writeValueAsString(modelId));
         } catch (IOException e) {
@@ -120,7 +118,7 @@ public class DummyManager implements Manager {
     }
 
     @Override
-    public void reconfigureModel(UUID modelId, ModelConfig config, String localFileName) {
+    public void reconfigureModel(UUID modelId, ModelConfig config, ModelDescriptor descriptor) {
         try {
             logger.trace("config='{}', model='{}'", mapper.writeValueAsString(config), mapper.writeValueAsString(modelId));
         } catch (IOException e) {
@@ -144,5 +142,10 @@ public class DummyManager implements Manager {
 
     @Override
     public void save(UUID uuid, String savepath) throws FOSException {
+    }
+
+    @Override
+    public void saveAsPMML(UUID uuid, String savePath, boolean compress) throws FOSException {
+
     }
 }

@@ -23,6 +23,8 @@
 package com.feedzai.fos.server.remote.impl;
 
 import com.feedzai.fos.api.Manager;
+import com.feedzai.fos.api.Model;
+import com.feedzai.fos.api.ModelDescriptor;
 import org.easymock.EasyMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,8 +46,8 @@ public class RemoteClassifierManagerTest {
     public void testDelegation() throws Exception {
         UUID dummy = UUID.nameUUIDFromBytes(new byte[0]);
         EasyMock.expect(innerManager.listModels()).andReturn(null).once();
-        EasyMock.expect(innerManager.addModel(null, (String) null)).andReturn(dummy).once();
-        EasyMock.expect(innerManager.addModel(null, (byte[]) null)).andReturn(dummy).once();
+        EasyMock.expect(innerManager.addModel(null, (ModelDescriptor) null)).andReturn(dummy).once();
+        EasyMock.expect(innerManager.addModel(null, (Model) null)).andReturn(dummy).once();
         EasyMock.expect(innerManager.getScorer()).andReturn(null).once();
         EasyMock.expect(innerManager.train(null,null)).andReturn(null).once();
         EasyMock.expect(innerManager.trainAndAdd(null, null)).andReturn(dummy).once();
@@ -59,10 +61,10 @@ public class RemoteClassifierManagerTest {
         innerManager.reconfigureModel(dummy, null);
         EasyMock.expectLastCall().once();
 
-        innerManager.reconfigureModel(dummy, null, (String) null);
+        innerManager.reconfigureModel(dummy, null, (ModelDescriptor) null);
         EasyMock.expectLastCall().once();
 
-        innerManager.reconfigureModel(dummy, null, (byte[]) null);
+        innerManager.reconfigureModel(dummy, null, (Model) null);
         EasyMock.expectLastCall().once();
 
         innerManager.save(dummy, null);
@@ -75,11 +77,11 @@ public class RemoteClassifierManagerTest {
         remote.removeModel(dummy);
         remote.close();
         remote.reconfigureModel(dummy, null);
-        remote.reconfigureModel(dummy, null, (String) null);
-        remote.reconfigureModel(dummy, null, (byte[]) null);
+        remote.reconfigureModel(dummy, null, (ModelDescriptor) null);
+        remote.reconfigureModel(dummy, null, (Model) null);
         remote.listModels();
-        remote.addModel(null, (String) null);
-        remote.addModel(null, (byte[]) null);
+        remote.addModel(null, (ModelDescriptor) null);
+        remote.addModel(null, (Model) null);
         remote.train(null,null);
         remote.trainAndAdd(null,null);
         remote.save(dummy, null);

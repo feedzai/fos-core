@@ -41,22 +41,22 @@ public interface Manager {
     /**
      * Adds a new model with the given configuration and using the given serialized classifier.
      *
-     * @param config the configuration of the model
-     * @param model  the new serialized classifier
+     * @param config The configuration of the model.
+     * @param model  A {@link Model representation of the model}.
      * @return the id of the new model
      * @throws FOSException when creating the classifier was not possible
      */
-    UUID addModel(ModelConfig config,byte[] model) throws FOSException;
+    UUID addModel(ModelConfig config, Model model) throws FOSException;
 
     /**
      * Adds a new model with the given configuration and using a local classifier source.
      *
-     * @param config        the configuration of the model
-     * @param localFileName the local filename (absolute path) of the serialized classifier
-     * @return the id of the new model
+     * @param config     The configuration of the model.
+     * @param descriptor the {@link ModelDescriptor} describing the classifier
+     * @return the id of the new models
      * @throws FOSException when creating the classifier was not possible
      */
-    UUID addModel(ModelConfig config, @NotBlank String localFileName) throws FOSException;
+    UUID addModel(ModelConfig config, @NotBlank ModelDescriptor descriptor) throws FOSException;
 
     /**
      * Removes the model identified by <code>modelId</code> from the list of active scorers (does not delete classifier file).
@@ -80,24 +80,24 @@ public interface Manager {
      * <p/>
      * Reloads the model now using the classifier <code>model</code> (does not delete previous classifier file).
      *
-     * @param modelId the id of the model to update
-     * @param config  the new configuration of the model
-     * @param model   the new serialized classifier
+     * @param modelId The id of the model to update.
+     * @param config  The new configuration of the model.
+     * @param model   A {@link Model representation of the model}.
      * @throws FOSException when reconfiguring the model was not possible
      */
-    void reconfigureModel(UUID modelId,ModelConfig config,byte[] model) throws FOSException;
+    void reconfigureModel(UUID modelId,ModelConfig config, Model model) throws FOSException;
 
     /**
      * Reconfigures the model identified by <code>modelId</code> with the given configuration.
      * <p/>
      * Reloads the model now using the classifier in the local file <code>localFileName</code> (does not delete previous classifier file).
      *
-     * @param modelId       the id of the model to update
-     * @param config        the new configuration of the model
-     * @param localFileName the local filename (absolute path) of the serialized classifier
+     * @param modelId    the id of the model to update
+     * @param config     the new configuration of the model
+     * @param descriptor the {@link ModelDescriptor} describing the classifier
      * @throws FOSException when reconfiguring the model was not possible
      */
-    void reconfigureModel(UUID modelId,ModelConfig config, @NotBlank String localFileName) throws FOSException;
+    void reconfigureModel(UUID modelId,ModelConfig config, @NotBlank ModelDescriptor descriptor) throws FOSException;
 
     /**
      * Lists the models configured in the system.
@@ -126,7 +126,7 @@ public interface Manager {
      * @return the id of the new model
      * @throws FOSException when training was not possible
      */
-    UUID trainAndAdd(ModelConfig config,List<Object[]> instances) throws FOSException;
+    UUID trainAndAdd(ModelConfig config, List<Object[]> instances) throws FOSException;
 
 
     /**
@@ -139,18 +139,18 @@ public interface Manager {
      * @return the id of the new model
      * @throws FOSException when training was not possible
      */
-    UUID trainAndAddFile(ModelConfig config,String path) throws FOSException;
+    UUID trainAndAddFile(ModelConfig config, String path) throws FOSException;
 
     /**
      * Trains a new classifier with the given configuration and using the given <code>instances</code>.
      *
      * @param config    the model configuration
      * @param instances the training instances
-     * @return a serialized representation of the model
+     * @return A {@link Model representation of the model}.
      * @throws FOSException when training was not possible
      */
     @NotNull
-    byte[] train(ModelConfig config,List<Object[]> instances) throws FOSException;
+    Model train(ModelConfig config, List<Object[]> instances) throws FOSException;
 
 
     /**
@@ -158,11 +158,12 @@ public interface Manager {
      *
      * @param config    the model configuration
      * @param path File with the training instances
-     * @return a serialized representation of the model
+     * @return A {@link Model representation of the model}.
      * @throws FOSException when training was not possible
      */
     @NotNull
-    byte[] trainFile(ModelConfig config, String path) throws FOSException;
+    public Model trainFile(ModelConfig config, String path) throws FOSException;
+
 
     /**
      * Frees any resources allocated to this manager.
@@ -178,4 +179,20 @@ public interface Manager {
      * @param savepath export model path
      */
     void save(UUID uuid, String savepath) throws FOSException;
+
+    /**
+     * Saves a UUID identified classifier as PMML to a given {@code filePath}.
+     * </p>
+     * The {@code filePath} will be the absolute file path where the model will be saved to.
+     * <p/>
+     * If the {@code compress} flag is set to {@code true}, the file will be saved in a GZipped compressed format.
+     * Concrete implementations may differ on how they handle the compression.
+     *
+     * @param uuid     The classifier's UUID.
+     * @param filePath The absolute file path  to which save the PMML representation of the classifier.
+     * @param compress {@code true} to compress the resulting file to GZip, or {@code false} to save it as a raw PMML file.
+     * @throws FOSException If if failed to read the classifier or export it to PMML.
+     * @since @since 1.0.4
+     */
+    void saveAsPMML(UUID uuid, String filePath, boolean compress) throws FOSException;
 }

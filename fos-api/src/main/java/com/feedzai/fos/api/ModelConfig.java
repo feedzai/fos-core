@@ -229,8 +229,9 @@ public final class ModelConfig implements Serializable {
         this.storeModel = storeModel;
     }
 
+
     /**
-     * Reads a moddel configuration from a file
+     * Reads a model configuration from a file.
      *
      * @param path configuration file path
      * @return ModelConfig read from a file
