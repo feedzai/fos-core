@@ -24,45 +24,33 @@ package com.feedzai.fos.api;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.feedzai.fos.common.validation.NotBlank;
 
 /**
- * A CategoricalAttribute will be mapped into the underlying implementation numeric type.
+ * A NumericAttribute will be mapped into the underlying implementation numeric type.
  */
-
-public class NumericAttribute extends Attribute {
-
+public final class NumericAttribute extends Attribute {
 
     @JsonCreator
-    public NumericAttribute(@JsonProperty("name") String name) {
+    public NumericAttribute(@NotBlank @JsonProperty("name") String name) {
         super(name);
     }
 
-
     @Override
-    public double parse(Object original, InstanceType type) throws FOSException {
-        if (original == null) {
-            throw new FOSException("Cannot parse null value");
-        }
-
+    protected double parse(Object original) throws FOSException {
         if (original.getClass() == Double.class) {
             return (Double) original;
         }
 
-        Double d;
-
         try {
-            d = Double.parseDouble(original.toString());
+            return Double.parseDouble(original.toString());
         } catch (Exception e) {
             throw new FOSException(e.getMessage(), e);
         }
-
-        return d;
     }
 
     @Override
     public String toString() {
         return "NumericAttribute{" + getName() + "}";
     }
-
-
 }

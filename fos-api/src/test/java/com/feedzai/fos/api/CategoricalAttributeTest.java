@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test for categorical  attributes
@@ -39,7 +40,6 @@ import static org.junit.Assert.assertEquals;
  */
 public class CategoricalAttributeTest {
 
-    public static final String UNKNOWN_NOMINAL = "_missing_";
     private List<String> nominal_values;
     private String name;
     private CategoricalAttribute field;
@@ -49,16 +49,16 @@ public class CategoricalAttributeTest {
         nominal_values = Arrays.asList("1", "2");
         name = "a";
         field = new CategoricalAttribute(name, nominal_values);
-
     }
+
     @Test
     public void testCreateNominal() throws Exception {
-        field.setClass();
         assertEquals("Nominal values were not set properly", nominal_values, field.getCategoricalInstances());
         assertEquals("Instance name not set properly", name, field.getName());
+
         int index = 0;
         for(String v : nominal_values) {
-            assertEquals("Known value must be unchanged", index, (int) field.parse(v,InstanceType.TRAINING));
+            assertEquals("Known value must be unchanged", index, (int) field.parseOrMissing(v));
             index++;
         }
     }
@@ -94,26 +94,19 @@ public class CategoricalAttributeTest {
     }
 
     @Test
-    public void testSetUnknownNominal() throws Exception {
-        String default_unknown = field.getUnknownReplacement();
-        assertEquals("Unknown value must be replaced", field.getUnknownReplacementIndex(), (int) field.parse("non_existant",InstanceType.TRAINING));
+    public void testSetFaultyValue() throws Exception {
+        assertTrue("Faulty categorical value must be replaced", Double.isNaN(field.parseOrMissing("non_existant")));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testSetNullValue() throws Exception {
+        assertTrue("Null is not accepted", Double.isNaN(field.parseOrMissing(null)));
     }
 
     @Test
-    public void testSetUnknownNominalClassForScoring() throws Exception {
-        field = new CategoricalAttribute(name, nominal_values);
-        field.setClass();
-        assertEquals("Unknown value must be replaced", field.getUnknownReplacementIndex(), (int) field.parse("non_existant",InstanceType.SCORING));
+    public void testSetMissingValue() throws Exception {
+        assertTrue("Missing value must be handled as missing", Double.isNaN(field.parseOrMissing(Attribute.MISSING_VALUE_STR)));
     }
-
-    @Test(expected =FOSException.class )
-    public void testSetUnknownNominalClassForTraining() throws Exception {
-        field = new CategoricalAttribute(name, nominal_values);
-        field.setClass();
-        assertEquals("Unknown value must be replaced", field.getUnknownReplacementIndex(), (int) field.parse("non_existant",InstanceType.TRAINING));
-    }
-
-
 
     @Test
     public void testJackson() throws Exception {
@@ -129,6 +122,5 @@ public class CategoricalAttributeTest {
         CategoricalAttribute extracted = (CategoricalAttribute) deserialized.get(0);
         assertEquals(field.getName(), extracted.getName());
         assertEquals(field.getCategoricalInstances(), extracted.getCategoricalInstances());
-        assertEquals(field.getUnknownReplacement(), extracted.getUnknownReplacement());
     }
 }

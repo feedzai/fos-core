@@ -31,6 +31,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,65 +45,29 @@ import static com.google.common.base.Preconditions.checkArgument;
  * by a default value.
  */
 public final class CategoricalAttribute extends Attribute {
-    @JsonIgnore
-    public final static String DEFAULT_UNKNOWN_REPLACEMENT = "__UNKOWN__";
-
     private List<String> categoricalInstances;
-
-
-    private String unknownReplacement = DEFAULT_UNKNOWN_REPLACEMENT;
-
-    @JsonIgnore
-    private int unknownReplacementIndex;
-
-    @JsonIgnore
-    private boolean isClass = false;
-
 
     /**
      * Creates a new categorical with the given <code>name</code>, <code>type</code> and <code>categoricalInstances</code>.
      * <p/> The <code>categoricalInstances</code> is the set of possible values that the field can take.
      *
-     * @param name             the name of the field
+     * @param name                  the name of the field
      * @param pcategoricalInstances for <code>type=nominal</code>, defines the possibles values of the field
-     * @param punknownReplacement replacement value for unknown categoricals
      */
     @JsonCreator
     public CategoricalAttribute(@NotBlank @JsonProperty("name") String name,
-                                @JsonProperty("categoricalInstances") List<String> pcategoricalInstances,
-                                @JsonProperty("unknownReplacement") String punknownReplacement) {
+                                @JsonProperty("categoricalInstances") List<String> pcategoricalInstances) {
         super(name);
+
         checkArgument(pcategoricalInstances != null && pcategoricalInstances.size() > 0, "Missing instances for nominal value");
         checkArgument(!pcategoricalInstances.contains(""), "Nominal instances values must not empty");
         checkArgument(!pcategoricalInstances.contains(null), "Nominal instances must not be null");
 
+        String[] sorted = pcategoricalInstances.toArray(new String[pcategoricalInstances.size()]);
+        Arrays.sort(sorted);
 
-        categoricalInstances = new ArrayList<>(pcategoricalInstances);
-
-        unknownReplacement = punknownReplacement == null ? DEFAULT_UNKNOWN_REPLACEMENT : punknownReplacement;
-
-        // add unknown replacement if it isn't  already part of the list
-        if (!categoricalInstances.contains(unknownReplacement)) {
-            categoricalInstances.add(unknownReplacement);
-        }
-
-        Collections.sort(categoricalInstances);
-
-        unknownReplacementIndex = Collections.binarySearch(categoricalInstances, unknownReplacement);
+        this.categoricalInstances = ImmutableList.copyOf(sorted);
     }
-
-    /**
-     * Creates a new categorical with the given <code>name</code>, <code>type</code> and <code>categoricalInstances</code>.
-     * <p/> The <code>categoricalInstances</code> is the set of possible values that the field can take (only valid for nominal).
-     *
-     * @param name             the name of the field
-     * @param categoricalInstances for <code>type=nominal</code>, defines the possibles values of the field
-     */
-    public CategoricalAttribute(@NotBlank String name, List<String> categoricalInstances) {
-        this(name, categoricalInstances, null);
-    }
-
-
 
     /**
      * Gets the list of nominal values for this field (if the <code>type=Nominal</code>) or null otherwise.
@@ -113,49 +78,17 @@ public final class CategoricalAttribute extends Attribute {
         return ImmutableList.copyOf(categoricalInstances);
     }
 
-    public String getUnknownReplacement() {
-        return unknownReplacement;
-    }
-
-    /**
-     * Marks this Categorical as a classifier
-     */
-    public void setClass() {
-        if (isClass) {
-            return;
-        }
-        this.isClass = true;
-
-
-        ArrayList<String> newCategorical = new ArrayList<>(categoricalInstances.size()-1);
-        for(String value : categoricalInstances) {
-            if (!value.equals(unknownReplacement)) {
-                newCategorical.add(value);
-            }
-        }
-        categoricalInstances = newCategorical;
-    }
-
-
     @Override
-    public double parse(Object original, InstanceType type) throws FOSException {
-        if (original == null) {
-            return Double.NaN;
-        }
+    protected double parse(Object original) throws FOSException {
         String value = original.toString();
-
         int index = Collections.binarySearch(categoricalInstances, value);
-        if ((isClass && type == InstanceType.TRAINING) && index < 0) {
-            throw new FOSException("Invalid value "
-                                   + original
-                                   + " for classifier, valid values are "
-                                   + Joiner.on(',').join(categoricalInstances));
 
+        if (index < 0) {
+            throw new FOSException(String.format("Failed to parse %s", original));
         }
 
-        return index < 0 ? unknownReplacementIndex : index;
+        return index;
     }
-
 
     @Override
     public int hashCode() {
@@ -182,11 +115,6 @@ public final class CategoricalAttribute extends Attribute {
         return toStringHelper(this)
                 .addValue(getName())
                 .add("categoricalInstances", categoricalInstances)
-                .add("unknownReplacement", unknownReplacement).toString();
-
-    }
-
-    public int getUnknownReplacementIndex() {
-        return unknownReplacementIndex;
+                .toString();
     }
 }

@@ -118,7 +118,7 @@ public interface Manager {
     Scorer getScorer() throws FOSException;
 
     /**
-     * Trains a new classifier with the given configuration and using the given <code>instances</code>.
+     * Trains a new classifier with the given configuration and using the givren <code>instances</code>.
      * <p/> Automatically add the new model to the existing scorer.
      *
      * @param config    the model configuration

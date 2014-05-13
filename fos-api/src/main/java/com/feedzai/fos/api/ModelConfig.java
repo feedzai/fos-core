@@ -131,6 +131,16 @@ public final class ModelConfig implements Serializable {
         return this.properties.put(key, value);
     }
 
+    /**
+     * Remove the given property from the current custom properties.
+     *
+     * @param key   the key of the property
+     * @return the already existing value in the map (or null if it doesn't exist).
+     */
+    @Nullable
+    public String removeProperty(@NotBlank String key) {
+        return this.properties.remove(key);
+    }
 
     @Override
     public int hashCode() {

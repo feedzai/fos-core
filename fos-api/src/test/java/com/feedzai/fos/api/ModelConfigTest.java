@@ -35,13 +35,10 @@ public class ModelConfigTest {
 
     @Test
     public void testJacksonSerialization() throws IOException {
-        List<String> nominal_values = Arrays.asList("1", "2");
-        String name = "a";
-        CategoricalAttribute field = new CategoricalAttribute(name, nominal_values);
+        CategoricalAttribute categorical = new CategoricalAttribute("categoric", Arrays.asList("abc", "def"));
         NumericAttribute numeric = new NumericAttribute("numeric");
-        List<Attribute> attributes = new ArrayList<>();
-        attributes.add(field);
-        attributes.add(numeric);
+
+        List<Attribute> attributes = Arrays.<Attribute>asList(categorical, numeric);
 
         Map<String, String> properties = new HashMap<>();
         properties.put("p1", "value1");
@@ -49,11 +46,13 @@ public class ModelConfigTest {
 
         ModelConfig config = new ModelConfig(attributes, properties);
 
-
-
         ObjectMapper mapper = new ObjectMapper();
         Assert.assertTrue(mapper.canSerialize(config.getClass()));
         String json = mapper.writeValueAsString(config);
+
+        System.out.println(json);
+        System.out.println(config);
+
         ModelConfig deserialized = mapper.readValue(json, config.getClass());
         assertEquals(config, deserialized);
     }
