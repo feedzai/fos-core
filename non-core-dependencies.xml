@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.feedzai.fos</groupId>
     <artifactId>fos-bundle</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.4</version>
     <packaging>pom</packaging>
     <name>FOS</name>
     <description>Feedzai Open Scoring Server Bundle</description>
@@ -12,12 +12,12 @@
         <dependency>
             <groupId>com.feedzai.fos</groupId>
             <artifactId>fos-impl-weka</artifactId>
-            <version>1.0.4-SNAPSHOT</version>
+            <version>1.0.4</version>
         </dependency>
         <dependency>
             <groupId>com.feedzai.fos</groupId>
             <artifactId>fos-impl-r</artifactId>
-            <version>1.0.4-SNAPSHOT</version>
+            <version>1.0.4</version>
         </dependency>
     </dependencies>
     <url>https://github.com/feedzai/fos-core</url>
