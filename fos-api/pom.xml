@@ -4,12 +4,12 @@
   <artifactId>fos-api</artifactId>
   <name>FOS API</name>
   <url>http://www.feedzai.com</url>
-  <version>1.0.3.1</version>
+  <version>1.0.3.2-SNAPSHOT</version>
 
   <parent>
     <groupId>com.feedzai.fos</groupId>
     <artifactId>fos</artifactId>
-    <version>1.0.3.1</version>
+    <version>1.0.3.2-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
