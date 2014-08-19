@@ -3,13 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fos-impl-dummy</artifactId>
   <name>FOS Dummy</name>
-  <version>1.0.3.2-SNAPSHOT</version>
+  <version>1.0.3.2</version>
   <url>http://www.feedzai.com</url>
 
   <parent>
     <groupId>com.feedzai.fos</groupId>
     <artifactId>fos</artifactId>
-    <version>1.0.3.2-SNAPSHOT</version>
+    <version>1.0.3.2</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
