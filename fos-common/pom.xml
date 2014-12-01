@@ -3,13 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fos-common</artifactId>
   <name>FOS Common</name>
-  <version>1.0.5</version>
+  <version>1.0.6-SNAPSHOT</version>
   <url>http://www.feedzai.com</url>
 
   <parent>
     <artifactId>fos</artifactId>
     <groupId>com.feedzai.fos</groupId>
-    <version>1.0.5</version>
+    <version>1.0.6-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
