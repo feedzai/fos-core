@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.feedzai.fos</groupId>
   <artifactId>fos</artifactId>
-  <version>1.0.6</version>
+  <version>1.0.7-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>FOS</name>
   <description>Feedzai Open Scoring Server</description>
@@ -14,7 +14,7 @@
         <connection>scm:git:git@github.com:feedzai/fos-core.git</connection>
         <developerConnection>scm:git:git@github.com:feedzai/fos-core.git</developerConnection>
         <url>git@github.com:feedzai/fos-core.git</url>
-        <tag>fos-1.0.6</tag>
+        <tag>HEAD</tag>
     </scm>
 
   <parent>
