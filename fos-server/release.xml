@@ -19,7 +19,7 @@
         <include>conf/**</include>
         <include>lib/**</include>
         <include>README.txt</include>
-		<include>LICENSE.txt</include>
+		    <include>LICENSE.txt</include>
       </includes>
       <excludes>
         <exclude>log/**</exclude>
