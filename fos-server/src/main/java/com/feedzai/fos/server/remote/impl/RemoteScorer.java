@@ -66,9 +66,9 @@ public class RemoteScorer implements com.feedzai.fos.server.remote.api.RemoteSco
 
     @Override
     @NotNull
-    public Map<UUID, double[]> score(Map<UUID, Object[]> modelIdsToScorables) throws RemoteException {
+    public List<double[]> score(UUID modelId,List<Object[]> scorables) throws RemoteException {
         try {
-            return this.scorer.score(modelIdsToScorables);
+            return this.scorer.score(modelId, scorables);
         } catch (Exception e) {
             logger.error("Caught exception from underlying implementation",e);
             throw new RemoteException("Translated in RMI layer", e);
@@ -77,9 +77,9 @@ public class RemoteScorer implements com.feedzai.fos.server.remote.api.RemoteSco
 
     @Override
     @NotNull
-    public List<double[]> score(UUID modelId,List<Object[]> scorables) throws RemoteException {
+    public double[] score(UUID modelId, Object[] scorable) throws RemoteException {
         try {
-            return this.scorer.score(modelId, scorables);
+            return this.scorer.score(modelId, scorable);
         } catch (Exception e) {
             logger.error("Caught exception from underlying implementation",e);
             throw new RemoteException("Translated in RMI layer", e);

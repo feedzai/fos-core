@@ -56,16 +56,6 @@ public class DummyScorer implements Scorer {
     }
 
     @Override
-    public Map<UUID, double[]> score(Map<UUID, Object[]> modelIdsToScorables) {
-        try {
-            logger.trace("modelIdsToScorables='{}'",  mapper.writeValueAsString(modelIdsToScorables));
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-        }
-        return Collections.EMPTY_MAP;
-    }
-
-    @Override
     public List<double[]> score(UUID modelId, List<Object[]> scorables) {
         try {
             logger.trace("modelId='{}', scorable='{}'",  mapper.writeValueAsString(modelId),  mapper.writeValueAsString(scorables));
@@ -73,6 +63,17 @@ public class DummyScorer implements Scorer {
             logger.error(e.getMessage(), e);
         }
         return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public double[] score(UUID modelId, Object[] scorable) {
+        try {
+            logger.trace("modelId='{}', scorable='{}'",  mapper.writeValueAsString(modelId),  mapper.writeValueAsString(scorable));
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+
+        return new double[0];
     }
 
     @Override

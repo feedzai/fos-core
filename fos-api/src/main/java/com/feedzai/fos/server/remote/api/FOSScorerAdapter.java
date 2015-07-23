@@ -54,18 +54,18 @@ public class FOSScorerAdapter implements Scorer {
     }
 
     @Override
-    public Map<UUID, double[]> score(Map<UUID, Object[]> uuidMap) throws FOSException {
+    public List<double[]> score(UUID uuid, List<Object[]> objects) throws FOSException {
         try {
-            return scorer.score(uuidMap);
+            return scorer.score(uuid, objects);
         } catch (RemoteException e) {
             throw new FOSException(e);
         }
     }
 
     @Override
-    public List<double[]> score(UUID uuid, List<Object[]> objects) throws FOSException {
+    public double[] score(UUID uuid, Object[] scorable) throws FOSException {
         try {
-            return scorer.score(uuid, objects);
+            return scorer.score(uuid, scorable);
         } catch (RemoteException e) {
             throw new FOSException(e);
         }
