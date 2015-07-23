@@ -23,9 +23,9 @@
 package com.feedzai.fos.api;
 
 import com.feedzai.fos.common.validation.NotNull;
+import com.google.common.collect.ImmutableList;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -43,36 +43,53 @@ public interface Scorer  {
      *
      * @param modelIds the list of models to score
      * @param scorable the instance data to score
-     * @return a list of scores double[] where each array position contains the score for each classifier
+     * @return a list of scores double[] where each list position contains the score for each classifier
      * @throws FOSException when scoring was not possible
      */
     @NotNull
-    List<double[]> score(List<UUID> modelIds,Object[] scorable) throws FOSException;
+    default List<double[]> score(List<UUID> modelIds,Object[] scorable) throws FOSException {
+        ImmutableList.Builder<double[]> resultsBuilder = ImmutableList.builder();
+
+        for (UUID modelId : modelIds) {
+            resultsBuilder.add(score(modelId, scorable));
+        }
+
+        return resultsBuilder.build();
+    }
 
     /**
-     * Score each the scorable (<code>modelIdsToScorables.value</code>) against the given model (<core>modelIdsToScorables.key</core>).
-     * <p/> The score must be between 0 and 1.
-     * <p/> The resulting scores are returned mapped by the provided <code>modelId</code>.
-     *
-     * @param modelIdsToScorables a map from modelId to scorable
-     * @return a map of scores where the key is the <code>modelId</code> (int between 0 and 999)
-     * @throws FOSException when scoring was not possible
-     */
-    @NotNull
-    Map<UUID, double[]> score(Map<UUID, Object[]> modelIdsToScorables) throws FOSException;
-
-    /**
-     * Score all <code>scorables agains</code> the given <code>modelId</code>.
+     * Score all <code>scorables against</code> the given <code>modelId</code>.
      * <p/> The score must be between 0 and 1.
      * <p/> The resulting scores are returned in the same order as the <code>scorables</code> (scorables(pos) » return(pos)).
      *
      * @param modelId   the id of the model
      * @param scorables an array of instances to score
-     * @return a map of scores where the key is the <code>modelId</code>
+     * @return a list of scores double[] where each list position contains the score for each <code>scorable</code>.
      * @throws FOSException when scoring was not possible
      */
     @NotNull
-    List<double[]> score(UUID modelId,List<Object[]> scorables) throws FOSException;
+    default List<double[]> score(UUID modelId, List<Object[]> scorables) throws FOSException {
+        ImmutableList.Builder<double[]> resultsBuilder = ImmutableList.builder();
+
+        for (Object[] scorable : scorables) {
+            resultsBuilder.add(score(modelId, scorable));
+        }
+
+        return resultsBuilder.build();
+    }
+
+    /**
+     * Score a single <code>scorable</code> against the given <code>modelId</code>.
+     *
+     * <p/> The score must be between 0 and 1.
+     *
+     * @param modelId   the id of the model
+     * @param scorable  the instance to score
+     * @return the scores
+     * @throws FOSException when scoring was not possible
+     */
+    @NotNull
+    double[] score(UUID modelId, Object[] scorable) throws FOSException;
 
     /**
      * Frees any resources allocated to this scorer.

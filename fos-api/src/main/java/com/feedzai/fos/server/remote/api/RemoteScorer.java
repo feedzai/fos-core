@@ -50,18 +50,6 @@ public interface RemoteScorer extends Remote {
     List<double[]> score(List<UUID> modelIds,Object[] scorable) throws RemoteException;
 
     /**
-     * Score each the scorable (<code>modelIdsToScorables.value</code>) against the given model (<core>modelIdsToScorables.key</core>).
-     * <p/> The score must be between 0 and 999.
-     * <p/> The resulting scores are returned mapped by the provided <code>modelId</code>.
-     *
-     * @param modelIdsToScorables a map from modelId to scorable
-     * @return a map of scores where the key is the <code>modelId</code> (int between 0 and 999)
-     * @throws RemoteException when scoring was not possible
-     */
-    @NotNull
-    Map<UUID, double[]> score(Map<UUID, Object[]> modelIdsToScorables) throws RemoteException;
-
-    /**
      * Score all <code>scorables agains</code> the given <code>modelId</code>.
      * <p/> The score must be between 0 and 999.
      * <p/> The resulting scores are returned in the same order as the <code>scorables</code> (scorables(pos) » return(pos)).
@@ -73,6 +61,19 @@ public interface RemoteScorer extends Remote {
      */
     @NotNull
     List<double[]> score(UUID modelId,List<Object[]> scorables) throws RemoteException;
+
+    /**
+     * Score a single <code>scorable</code> against the given <code>modelId</code>.
+     *
+     * <p/> The score must be between 0 and 999.
+     *
+     * @param modelId   the id of the model
+     * @param scorable  the instance data to score
+     * @return the scores
+     * @throws RemoteException when scoring was not possible
+     */
+    @NotNull
+    double[] score(UUID modelId, Object[] scorable) throws RemoteException;
 
     /**
      * Frees any resources allocated to this scorer.

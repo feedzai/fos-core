@@ -81,20 +81,6 @@ public class KryoScorer implements Scorer {
     }
 
     @Override
-    public Map<UUID, double[]> score(Map<UUID, Object[]> modelIdsToScorables) throws FOSException {
-        RemoteConnection con = null;
-        try {
-            con = getConnection();
-            Map<UUID, double[]> scores = con.score(modelIdsToScorables);
-            return scores;
-        } catch (Exception e) {
-            throw new FOSException(e.getMessage(), e);
-        } finally {
-            releaseConnection(con);
-        }
-    }
-
-    @Override
     public List<double[]> score(UUID modelId, List<Object[]> scorables) throws FOSException {
         RemoteConnection con = null;
         try {
@@ -107,6 +93,21 @@ public class KryoScorer implements Scorer {
             releaseConnection(con);
         }
     }
+
+    @Override
+    public double[] score(UUID modelId, Object[] scorable) throws FOSException {
+        RemoteConnection con = null;
+        try {
+            con = getConnection();
+            double[] scores = con.score(modelId, scorable);
+            return scores;
+        } catch (Exception e) {
+            throw new FOSException(e.getMessage(), e);
+        } finally {
+            releaseConnection(con);
+        }
+    }
+
 
     @Override
     public void close() throws FOSException {
@@ -200,12 +201,12 @@ public class KryoScorer implements Scorer {
         }
 
         @Override
-        public Map<UUID, double[]> score(Map<UUID, Object[]> modelIdsToScorables) throws FOSException {
+        public List<double[]> score(UUID modelId, List<Object[]> scorables) throws FOSException {
             throw new FOSException("Not implemented");
         }
 
         @Override
-        public List<double[]> score(UUID modelId, List<Object[]> scorables) throws FOSException {
+        public double[] score(UUID modelId, Object[] scorabl) throws FOSException {
             throw new FOSException("Not implemented");
         }
 

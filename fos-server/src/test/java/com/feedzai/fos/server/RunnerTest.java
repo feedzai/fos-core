@@ -46,6 +46,6 @@ public class RunnerTest {
         IRemoteManager manager = (IRemoteManager) registry.lookup(IRemoteManager.class.getSimpleName());
 
         RemoteScorer scorer = (RemoteScorer) registry.lookup(RemoteScorer.class.getSimpleName());
-        Assert.assertEquals(manager.getScorer().score(dummy, null), scorer.score(dummy, null));
+        Assert.assertEquals(manager.getScorer().score(dummy, new Object[0]), scorer.score(dummy, new Object[0]));
     }
 }

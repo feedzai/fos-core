@@ -30,6 +30,7 @@ import org.powermock.api.easymock.PowerMock;
 import org.powermock.api.easymock.annotation.Mock;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 /**
@@ -45,16 +46,14 @@ public class RemoteClassifierScorerTest {
     public void testDelegate() throws Exception {
         UUID dummy = UUID.nameUUIDFromBytes(new byte[0]);
 
-        EasyMock.expect(innerScorer.score(dummy,null)).andReturn(null).once();
-        EasyMock.expect(innerScorer.score(dummy,null)).andReturn(null).once();
-        EasyMock.expect(innerScorer.score(null)).andReturn(null).once();
+        EasyMock.expect(innerScorer.score(dummy, new ArrayList<>())).andReturn(null).once();
+        EasyMock.expect(innerScorer.score(dummy, new Object[0])).andReturn(null).once();
 
         PowerMock.replay(innerScorer);
 
         RemoteScorer remote = new RemoteScorer(innerScorer);
-        remote.score(dummy,null);
-        remote.score(dummy,null);
-        remote.score(null);
+        remote.score(dummy, new ArrayList<>());
+        remote.score(dummy, new Object[0]);
 
         PowerMock.verifyAll();
     }
