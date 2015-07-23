@@ -37,7 +37,7 @@ import java.util.UUID;
  */
 public interface Scorer  {
     /**
-     * Score the <code>scorable</code> against the given <core>modelIds</core>.
+     * Score the <code>scorable</code> against the given <code>modelIds</code>.
      * <p/> The score must be between 0 and 1.
      * <p/> The resulting scores are returned by the same order as the <code>modelIds</code> (modelsIds(pos) » return(pos)).
      *
@@ -47,7 +47,7 @@ public interface Scorer  {
      * @throws FOSException when scoring was not possible
      */
     @NotNull
-    default List<double[]> score(List<UUID> modelIds,Object[] scorable) throws FOSException {
+    default List<double[]> score(List<UUID> modelIds, Object[] scorable) throws FOSException {
         ImmutableList.Builder<double[]> resultsBuilder = ImmutableList.builder();
 
         for (UUID modelId : modelIds) {
