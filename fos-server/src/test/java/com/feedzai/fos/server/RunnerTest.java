@@ -24,17 +24,23 @@ package com.feedzai.fos.server;
 
 import com.feedzai.fos.server.remote.api.IRemoteManager;
 import com.feedzai.fos.server.remote.api.RemoteScorer;
-import junit.framework.Assert;
 import org.junit.Test;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.UUID;
 
+import static org.junit.Assert.assertArrayEquals;
+
 /**
  * @author Marco Jorge (marco.jorge@feedzai.com)
  */
 public class RunnerTest {
+    /**
+     * Epsilon for comparing doubles.
+     */
+    private final double EPS = 0.001;
+
     @Test
     public void mainTest() throws Exception {
         Runner.main("-c", "target/test-classes/ClassificationServerParameters.properties");
@@ -46,6 +52,6 @@ public class RunnerTest {
         IRemoteManager manager = (IRemoteManager) registry.lookup(IRemoteManager.class.getSimpleName());
 
         RemoteScorer scorer = (RemoteScorer) registry.lookup(RemoteScorer.class.getSimpleName());
-        Assert.assertEquals(manager.getScorer().score(dummy, new Object[0]), scorer.score(dummy, new Object[0]));
+        assertArrayEquals(manager.getScorer().score(dummy, new Object[0]), scorer.score(dummy, new Object[0]), EPS);
     }
 }

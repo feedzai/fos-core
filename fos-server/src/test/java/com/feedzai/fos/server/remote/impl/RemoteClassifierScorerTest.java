@@ -45,15 +45,16 @@ public class RemoteClassifierScorerTest {
     @Test
     public void testDelegate() throws Exception {
         UUID dummy = UUID.nameUUIDFromBytes(new byte[0]);
+        Object[] scorable = new Object[0];
 
         EasyMock.expect(innerScorer.score(dummy, new ArrayList<>())).andReturn(null).once();
-        EasyMock.expect(innerScorer.score(dummy, new Object[0])).andReturn(null).once();
+        EasyMock.expect(innerScorer.score(dummy, scorable)).andReturn(null).once();
 
         PowerMock.replay(innerScorer);
 
         RemoteScorer remote = new RemoteScorer(innerScorer);
         remote.score(dummy, new ArrayList<>());
-        remote.score(dummy, new Object[0]);
+        remote.score(dummy, scorable);
 
         PowerMock.verifyAll();
     }
