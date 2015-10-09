@@ -3,13 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>fos-server</artifactId>
   <name>FOS Server</name>
-  <version>1.0.7</version>
+  <version>1.0.8-SNAPSHOT</version>
   <url>http://www.feedzai.com</url>
 
   <parent>
     <artifactId>fos</artifactId>
     <groupId>com.feedzai.fos</groupId>
-    <version>1.0.7</version>
+    <version>1.0.8-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
