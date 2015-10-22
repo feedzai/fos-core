@@ -373,6 +373,7 @@
         <artifactId>maven-gpg-plugin</artifactId>
         <configuration>
           <passphrase>${gpg.passphrase}</passphrase>
+	  <keyname>opensource@feedzai.com</keyname>
         </configuration>
       </plugin>
     </plugins>
