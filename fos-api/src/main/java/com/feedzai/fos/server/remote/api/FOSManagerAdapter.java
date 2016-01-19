@@ -22,8 +22,15 @@
  */
 package com.feedzai.fos.server.remote.api;
 
-import com.feedzai.fos.api.*;
+import com.feedzai.fos.api.FOSException;
+import com.feedzai.fos.api.KryoScorer;
+import com.feedzai.fos.api.Manager;
+import com.feedzai.fos.api.Model;
+import com.feedzai.fos.api.ModelConfig;
+import com.feedzai.fos.api.ModelDescriptor;
+import com.feedzai.fos.api.Scorer;
 import com.feedzai.fos.common.validation.NotBlank;
+import com.google.common.base.Optional;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -49,6 +56,7 @@ public class FOSManagerAdapter implements Manager {
         this.kryoScorer = kryoScorer;
     }
 
+    @Override
     public UUID addModel(ModelConfig modelConfig, Model binary) throws FOSException {
         try {
             return manager.addModel(modelConfig, binary);
@@ -57,6 +65,7 @@ public class FOSManagerAdapter implements Manager {
         }
     }
 
+    @Override
     public UUID addModel(ModelConfig modelConfig, @NotBlank ModelDescriptor descriptor) throws FOSException {
         try {
             return manager.addModel(modelConfig, descriptor);
@@ -65,6 +74,7 @@ public class FOSManagerAdapter implements Manager {
         }
     }
 
+    @Override
     public void removeModel(UUID uuid) throws FOSException {
         try {
             manager.removeModel(uuid);
@@ -73,7 +83,7 @@ public class FOSManagerAdapter implements Manager {
         }
     }
 
-    
+    @Override
     public void reconfigureModel(UUID uuid, ModelConfig modelConfig) throws FOSException {
         try {
             manager.reconfigureModel(uuid, modelConfig);
@@ -82,7 +92,7 @@ public class FOSManagerAdapter implements Manager {
         }
     }
 
-    
+    @Override
     public void reconfigureModel(UUID uuid, ModelConfig modelConfig, Model bytes) throws FOSException {
         try {
             manager.reconfigureModel(uuid, modelConfig, bytes);
@@ -91,7 +101,7 @@ public class FOSManagerAdapter implements Manager {
         }
     }
 
-    
+    @Override
     public void reconfigureModel(UUID uuid, ModelConfig modelConfig, @NotBlank ModelDescriptor descriptor) throws FOSException {
         try {
             manager.reconfigureModel(uuid, modelConfig, descriptor);
@@ -100,7 +110,7 @@ public class FOSManagerAdapter implements Manager {
         }
     }
 
-    
+    @Override
     public Map<UUID, ? extends ModelConfig> listModels() throws FOSException {
         try {
             return manager.listModels();
@@ -109,7 +119,7 @@ public class FOSManagerAdapter implements Manager {
         }
     }
 
-    
+    @Override
     public Scorer getScorer() throws FOSException {
         try {
             if (kryoScorer != null) {
@@ -122,7 +132,7 @@ public class FOSManagerAdapter implements Manager {
         }
     }
 
-    
+    @Override
     public UUID trainAndAdd(ModelConfig modelConfig, List<Object[]> objects) throws FOSException {
         try {
             return manager.trainAndAdd(modelConfig, objects);
@@ -131,7 +141,7 @@ public class FOSManagerAdapter implements Manager {
         }
     }
 
-    
+    @Override
     public UUID trainAndAddFile(ModelConfig modelConfig, String s) throws FOSException {
         try {
             return manager.trainAndAddFile(modelConfig, s);
@@ -141,7 +151,7 @@ public class FOSManagerAdapter implements Manager {
 
     }
 
-    
+    @Override
     public Model train(ModelConfig modelConfig, List<Object[]> objects) throws FOSException {
         try {
             return manager.train(modelConfig, objects);
@@ -151,7 +161,16 @@ public class FOSManagerAdapter implements Manager {
 
     }
 
-    
+    @Override
+    public double[] featureImportance(UUID uuid, Optional<List<Object[]>> instances, double sampleRate, long seed) throws FOSException {
+        try {
+            return manager.featureImportance(uuid, instances, sampleRate, seed);
+        } catch (RemoteException e) {
+            throw new FOSException(e);
+        }
+    }
+
+    @Override
     public Model trainFile(ModelConfig modelConfig, String s) throws FOSException {
         try {
             return manager.trainFile(modelConfig, s);
@@ -161,7 +180,7 @@ public class FOSManagerAdapter implements Manager {
 
     }
 
-    
+    @Override
     public void close() throws FOSException {
         try {
             manager.close();
@@ -170,7 +189,7 @@ public class FOSManagerAdapter implements Manager {
         }
     }
 
-    
+    @Override
     public void save(UUID uuid, String savepath) throws FOSException {
         try {
             manager.save(uuid, savepath);

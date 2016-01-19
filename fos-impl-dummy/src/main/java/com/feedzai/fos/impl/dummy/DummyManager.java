@@ -24,6 +24,7 @@ package com.feedzai.fos.impl.dummy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.feedzai.fos.api.*;
+import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +57,7 @@ public class DummyManager implements Manager {
 
     @Override
     public UUID trainAndAddFile(ModelConfig config, String path) throws FOSException {
-        return  UUID.nameUUIDFromBytes(new byte[0]);
+        return UUID.nameUUIDFromBytes(new byte[0]);
     }
 
     @Override
@@ -67,6 +68,11 @@ public class DummyManager implements Manager {
             logger.error(e.getMessage(), e); 
         }
         return new ModelBinary(new byte[0]);
+    }
+
+    @Override
+    public double[] featureImportance(UUID uuid, Optional<List<Object[]>> instances, double sampleRate, long seed) throws FOSException {
+        throw new FOSException("FOS dummy implementation does not support feature importance");
     }
 
     @Override

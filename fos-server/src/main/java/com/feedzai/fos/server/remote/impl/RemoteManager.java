@@ -26,6 +26,7 @@ import com.feedzai.fos.api.*;
 import com.feedzai.fos.common.validation.NotBlank;
 import com.feedzai.fos.common.validation.NotNull;
 import com.feedzai.fos.server.remote.api.IRemoteManager;
+import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -122,6 +123,11 @@ public class RemoteManager implements IRemoteManager {
     @Override
     public Model train(ModelConfig config, List<Object[]> instances) throws RemoteException, FOSException {
         return manager.train(config, instances);
+    }
+
+    @Override
+    public double[] featureImportance(UUID uuid, Optional<List<Object[]>> instances, double sampleRate, long seed) throws RemoteException, FOSException {
+        return manager.featureImportance(uuid, instances, sampleRate, seed);
     }
 
     @Override

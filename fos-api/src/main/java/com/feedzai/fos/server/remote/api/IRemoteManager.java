@@ -22,9 +22,14 @@
  */
 package com.feedzai.fos.server.remote.api;
 
-import com.feedzai.fos.api.*;
+import com.feedzai.fos.api.FOSException;
+import com.feedzai.fos.api.Manager;
+import com.feedzai.fos.api.Model;
+import com.feedzai.fos.api.ModelConfig;
+import com.feedzai.fos.api.ModelDescriptor;
 import com.feedzai.fos.common.validation.NotBlank;
 import com.feedzai.fos.common.validation.NotNull;
+import com.google.common.base.Optional;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -141,7 +146,6 @@ public interface IRemoteManager extends Remote {
      */
     UUID trainAndAddFile(ModelConfig config,String path) throws RemoteException,FOSException;
 
-
     /**
      * Trains a new classifier with the given configuration and using the given <code>instances</code>.
      *
@@ -153,6 +157,23 @@ public interface IRemoteManager extends Remote {
     @NotNull
     Model train(ModelConfig config,List<Object[]> instances) throws RemoteException, FOSException;
 
+    /**
+     * Compute the feature importance for the model.
+     *
+     * @param uuid          The uuid of the model whose feature importance should be computed.
+     * @param instances     An optional set of instances that can be used to compute feature importance.
+     *                      This set of instances should not be the ones used for training.
+     * @param sampleRate    The sample rate that will be applied to the dataset of instances.
+     *                      Some models might use the provided {@code instances} others might prefer to use some internally
+     *                      stored information.
+     * @param seed          The random number generator seed.
+     * @return Aan array with the feature importance, one element for each feature.
+     * @throws RemoteException If there was a problem with the communication layer.
+     * @throws FOSException If the underlying model does not support computing feature importance.
+     * @since 1.0.9
+     */
+    @NotNull
+    double[] featureImportance(UUID uuid, Optional<List<Object[]>> instances, double sampleRate, long seed) throws RemoteException, FOSException;
 
     /**
      * Trains a new classifier with the given configuration and using the given <code>instances</code>.
@@ -182,5 +203,5 @@ public interface IRemoteManager extends Remote {
     /**
      * @see com.feedzai.fos.api.Manager#saveAsPMML(java.util.UUID, String, boolean)
      */
-    public abstract void saveAsPMML(UUID uuid, String savePath, boolean compress) throws RemoteException, FOSException;
+    void saveAsPMML(UUID uuid, String savePath, boolean compress) throws RemoteException, FOSException;
 }
