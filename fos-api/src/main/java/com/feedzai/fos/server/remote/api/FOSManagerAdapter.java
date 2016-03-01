@@ -162,9 +162,9 @@ public class FOSManagerAdapter implements Manager {
     }
 
     @Override
-    public double[] featureImportance(UUID uuid, Optional<List<Object[]>> instances, double sampleRate, long seed) throws FOSException {
+    public double[] featureImportance(UUID uuid, Optional<List<Object[]>> instances, long seed) throws FOSException {
         try {
-            return manager.featureImportance(uuid, instances, sampleRate, seed);
+            return manager.featureImportance(uuid, instances, seed);
         } catch (RemoteException e) {
             throw new FOSException(e);
         }

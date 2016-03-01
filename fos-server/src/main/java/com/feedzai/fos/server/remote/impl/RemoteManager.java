@@ -126,8 +126,8 @@ public class RemoteManager implements IRemoteManager {
     }
 
     @Override
-    public double[] featureImportance(UUID uuid, Optional<List<Object[]>> instances, double sampleRate, long seed) throws RemoteException, FOSException {
-        return manager.featureImportance(uuid, instances, sampleRate, seed);
+    public double[] featureImportance(UUID uuid, Optional<List<Object[]>> instances, long seed) throws RemoteException, FOSException {
+        return manager.featureImportance(uuid, instances, seed);
     }
 
     @Override

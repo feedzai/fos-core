@@ -71,7 +71,7 @@ public class DummyManager implements Manager {
     }
 
     @Override
-    public double[] featureImportance(UUID uuid, Optional<List<Object[]>> instances, double sampleRate, long seed) throws FOSException {
+    public double[] featureImportance(UUID uuid, Optional<List<Object[]>> instances, long seed) throws FOSException {
         throw new FOSException("FOS dummy implementation does not support feature importance");
     }
 
